@@ -37,9 +37,9 @@ jobs:
       - name: Set up AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ AWS_REGION }}
+          aws-access-key-id: $AWS_ACCESS_KEY_ID
+          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
+          aws-region: $AWS_REGION
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -64,8 +64,8 @@ jobs:
       - name: Deploy to Elastic Beanstalk
         run: |
           aws elasticbeanstalk create-application-version \
-            --application-name ${{ AWS_EB_APPLICATION_NAME }} \
+            --application-name $AWS_EB_APPLICATION_NAME \
             --source-bundle S3Bucket=your-s3-bucket,S3Key=your-docker-image-name.zip
 
           aws elasticbeanstalk update-environment \
-            --environment-name {{ AWS_EB_APPLICATION_ENV_NAME }}
+            --environment-name $AWS_EB_APPLICATION_ENV_NAME
