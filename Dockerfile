@@ -3,5 +3,5 @@ RUN  apk update && \
      apk add curl tzdata ttf-freefont && \
      cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
-COPY build/libs/inswave-service1-0.0.1-SNAPSHOT.jar app.jar
+COPY build/libs/*.jar app.jar
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=dev","-jar","/app.jar"]
