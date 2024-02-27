@@ -58,7 +58,7 @@ jobs:
 
       - name: Create ZIP archive with Dockerrun.aws.json
         run: |
-          echo '{"AWSEBDockerrunVersion": "1", "Image": {"Name": "your-account-id.dkr.ecr.your-aws-region.amazonaws.com/your-repository-name:latest"}}' > Dockerrun.aws.json
+          echo '{"AWSEBDockerrunVersion": "1", "Image": {"Name": "uphiller/action:latest"}}' > Dockerrun.aws.json
           zip -r your-docker-image-name.zip Dockerrun.aws.json
 
       - name: Deploy to Elastic Beanstalk
