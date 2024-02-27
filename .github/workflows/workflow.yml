@@ -8,6 +8,11 @@ env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
   DOCKER_REPOSITORY: ${{ secrets.DOCKERHUB_REPOSITORY }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_EB_APPLICATION_NAME: ${{ secrets.AWS_EB_APPLICATION_NAME }}
+  AWS_EB_APPLICATION_ENV_NAME: ${{ secrets.AWS_EB_APPLICATION_ENV_NAME }}
   LATEST_IMAGE_TAG: latest
   PAST_IMAGE_TAG: past
 
@@ -29,6 +34,13 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ AWS_REGION }}
+
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -43,3 +55,18 @@ jobs:
           docker push $DOCKER_REPOSITORY:$PAST_IMAGE_TAG
           docker build -t $DOCKER_REPOSITORY:$LATEST_IMAGE_TAG .
           docker push $DOCKER_REPOSITORY:$LATEST_IMAGE_TAG
+
+      - name: Create ZIP archive with Dockerrun.aws.json
+          run: |
+            echo '{"AWSEBDockerrunVersion": "1", "Image": {"Name": "your-account-id.dkr.ecr.your-aws-region.amazonaws.com/your-repository-name:latest"}}' > Dockerrun.aws.json
+            zip -r your-docker-image-name.zip Dockerrun.aws.json
+
+      - name: Deploy to Elastic Beanstalk
+        run: |
+          aws elasticbeanstalk create-application-version \
+            --application-name your-application-name \
+            --source-bundle S3Bucket=your-s3-bucket,S3Key=your-docker-image-name.zip
+
+          aws elasticbeanstalk update-environment \
+            --environment-name your-environment-name \
+            --version-label your-version-label
