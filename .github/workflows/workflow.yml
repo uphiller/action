@@ -34,12 +34,12 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
-      - name: Set up AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+#      - name: Set up AWS credentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -59,15 +59,25 @@ jobs:
       - name: Create ZIP archive with Dockerrun.aws.json
         run: |
           echo '{"AWSEBDockerrunVersion": "1", "Image": {"Name": "uphiller/action:latest"}}' > Dockerrun.aws.json
-          zip -r your-docker-image-name.zip Dockerrun.aws.json
+#          zip -r your-docker-image-name.zip Dockerrun.aws.json
 
-      - name: Deploy to Elastic Beanstalk
-        run: |
-          aws elasticbeanstalk create-application-version \
-            --application-name $AWS_EB_APPLICATION_NAME \
-            --version-label your-version-label \
-            --source-bundle S3Bucket=elasticbeanstalk-ap-northeast-2-839850511691,S3Key=your-docker-image-name.zip
+      - name: Beanstalk Deploy
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: ${{ secrets.AWS_APPLICATION_NAME }}
+          environment_name: ${{ secrets.AWS_EB_APPLICATION_ENV_NAME }}
+          region: ${{ secrets.AWS_REGION }}
+          deployment_package: Dockerrun.aws.json
 
-          aws elasticbeanstalk update-environment \
-            --environment-name $AWS_EB_APPLICATION_ENV_NAME \
-            --version-label your-version-label
+#      - name: Deploy to Elastic Beanstalk
+#        run: |
+#          aws elasticbeanstalk create-application-version \
+#            --application-name $AWS_EB_APPLICATION_NAME \
+#            --version-label your-version-label \
+#            --source-bundle S3Bucket=elasticbeanstalk-ap-northeast-2-839850511691,S3Key=your-docker-image-name.zip
+#
+#          aws elasticbeanstalk update-environment \
+#            --environment-name $AWS_EB_APPLICATION_ENV_NAME \
+#            --version-label your-version-label
