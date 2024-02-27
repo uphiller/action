@@ -8,7 +8,8 @@ env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
   DOCKER_REPOSITORY: ${{ secrets.DOCKERHUB_REPOSITORY }}
-  IMAGE_TAG: latest
+  LATEST_IMAGE_TAG: latest
+  PAST_IMAGE_TAG: past
 
 jobs:
   build-and-push-image:
@@ -34,8 +35,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build, tag, and push image to Docker Hub
+      - name: Build, tag, and push image to Docker HubK
         id: build-image
         run: |
-          docker build -t $DOCKER_REPOSITORY:$IMAGE_TAG .
-          docker push $DOCKER_REPOSITORY:$IMAGE_TAG
+          docker pull $DOCKER_REPOSITORY:$LATEST_IMAGE_TAG
+          docker tag $DOCKER_REPOSITORY:$LATEST_IMAGE_TAG $DOCKER_REPOSITORY:$PAST_IMAGE_TAG
+          docker push $DOCKER_REPOSITORY:$PAST_IMAGE_TAG
+          docker build -t $DOCKER_REPOSITORY:$LATEST_IMAGE_TAG .
+          docker push $DOCKER_REPOSITORY:$LATEST_IMAGE_TAG
