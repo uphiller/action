@@ -57,16 +57,15 @@ jobs:
           docker push $DOCKER_REPOSITORY:$LATEST_IMAGE_TAG
 
       - name: Create ZIP archive with Dockerrun.aws.json
-          run: |
-            echo '{"AWSEBDockerrunVersion": "1", "Image": {"Name": "your-account-id.dkr.ecr.your-aws-region.amazonaws.com/your-repository-name:latest"}}' > Dockerrun.aws.json
-            zip -r your-docker-image-name.zip Dockerrun.aws.json
+        run: |
+          echo '{"AWSEBDockerrunVersion": "1", "Image": {"Name": "your-account-id.dkr.ecr.your-aws-region.amazonaws.com/your-repository-name:latest"}}' > Dockerrun.aws.json
+          zip -r your-docker-image-name.zip Dockerrun.aws.json
 
       - name: Deploy to Elastic Beanstalk
         run: |
           aws elasticbeanstalk create-application-version \
-            --application-name your-application-name \
+            --application-name ${{ AWS_EB_APPLICATION_NAME }} \
             --source-bundle S3Bucket=your-s3-bucket,S3Key=your-docker-image-name.zip
 
           aws elasticbeanstalk update-environment \
-            --environment-name your-environment-name \
-            --version-label your-version-label
+            --environment-name {{ AWS_EB_APPLICATION_ENV_NAME }}
