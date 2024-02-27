@@ -65,7 +65,9 @@ jobs:
         run: |
           aws elasticbeanstalk create-application-version \
             --application-name $AWS_EB_APPLICATION_NAME \
+            --version-label your-version-label \
             --source-bundle S3Bucket=your-s3-bucket,S3Key=your-docker-image-name.zip
 
           aws elasticbeanstalk update-environment \
-            --environment-name $AWS_EB_APPLICATION_ENV_NAME
+            --environment-name $AWS_EB_APPLICATION_ENV_NAME \
+            --version-label your-version-label
