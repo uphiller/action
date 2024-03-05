@@ -26,6 +26,12 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'com.amazonaws:aws-java-sdk-ec2:1.12.667'
+    implementation 'com.amazonaws:aws-java-sdk-rds:1.12.668'
+    implementation 'com.amazonaws:aws-java-sdk-ebs:1.12.668'
+    implementation 'org.apache.poi:poi:5.2.5'
+    implementation 'org.apache.poi:poi-ooxml:5.2.5'
+
 }
 
 tasks.named('test') {
