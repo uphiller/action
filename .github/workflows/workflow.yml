@@ -49,11 +49,6 @@ jobs:
           docker build -t $DOCKER_REPOSITORY:$LATEST_IMAGE_TAG .
           docker push $DOCKER_REPOSITORY:$LATEST_IMAGE_TAG
 
-#      - name: Set Version Label
-#        run: echo "VERSION_LABEL=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
-#
-#      - name: Display Version Label
-#        run: echo "Version Label: $VERSION_LABEL"
       - name: Get current time
         uses: 1466587594/get-current-time@v2
         id: current-time
@@ -70,15 +65,4 @@ jobs:
           environment_name: ${{ secrets.AWS_EB_APPLICATION_ENV_NAME }}
           region: ${{ secrets.AWS_REGION }}
           version_label: ${{steps.current-time.outputs.formattedTime}}
-          deployment_package: Dockerrun.aws.json
-
-#      - name: Deploy to Elastic Beanstalk
-#        run: |
-#          aws elasticbeanstalk create-application-version \
-#            --application-name $AWS_EB_APPLICATION_NAME \
-#            --version-label your-version-label \
-#            --source-bundle S3Bucket=elasticbeanstalk-ap-northeast-2-839850511691,S3Key=your-docker-image-name.zip
-#
-#          aws elasticbeanstalk update-environment \
-#            --environment-name $AWS_EB_APPLICATION_ENV_NAME \
-#            --version-label your-version-label
+          deployment_package: docker-compose.yml

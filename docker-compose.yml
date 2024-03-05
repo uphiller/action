@@ -1,0 +1,6 @@
+version: "3.8"
+services:
+  springboot:
+    image: uphiller/action:latest
+    ports:
+      - 8080:8080
