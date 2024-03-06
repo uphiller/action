@@ -42,6 +42,10 @@ resource "aws_subnet" "public_subnet_2" {
   }
 }
 
+resource "aws_ecr_repository" "ecr" {
+  name                 = "pay"
+}
+
 resource "aws_elastic_beanstalk_application" "my_app" {
   name = "iaw-clo-ss-eb_pay-an2-dev-1"
 }
