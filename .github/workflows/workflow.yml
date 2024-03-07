@@ -39,8 +39,8 @@ jobs:
       - name: Build, tag, and push image to Docker Hub
         id: build-image
         run: |
-          docker pull $ECR_URI:$LATEST_IMAGE_TAG
-          docker tag $ECR_URI:$LATEST_IMAGE_TAG $ECR_URI:$PAST_IMAGE_TAG
+#          docker pull $ECR_URI:$LATEST_IMAGE_TAG
+#          docker tag $ECR_URI:$LATEST_IMAGE_TAG $ECR_URI:$PAST_IMAGE_TAG
           docker push $ECR_URI:$PAST_IMAGE_TAG
           docker build -t $ECR_URI:$LATEST_IMAGE_TAG .
           docker push $ECR_URI:$LATEST_IMAGE_TAG
