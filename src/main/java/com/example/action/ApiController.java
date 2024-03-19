@@ -13,7 +13,7 @@ import java.util.Map;
 @RequestMapping("/api")
 public class ApiController {
 
-    @GetMapping("")
+    @GetMapping("/test")
     public ResponseEntity getApi() {
         Map response = new HashMap();
         response.put("route","api");

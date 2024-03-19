@@ -13,7 +13,7 @@ import java.util.Map;
 @RequestMapping("/batch")
 public class BatchController {
 
-    @GetMapping("")
+    @GetMapping("/test")
     public ResponseEntity getBatch() {
         Map response = new HashMap();
         response.put("route","batch");
