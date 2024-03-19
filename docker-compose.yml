@@ -3,4 +3,4 @@ services:
   springboot:
     image: 839850511691.dkr.ecr.ap-northeast-2.amazonaws.com/pay:latest
     ports:
-      - 8080:8080
+      - 8080:8081
